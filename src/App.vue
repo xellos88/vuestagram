@@ -9,6 +9,7 @@
         <img class="logo" alt="insta" src="https://t1.daumcdn.net/cfile/tistory/2677863D5737D65D09">
       </li>
       <li class="header-button header-button-right" v-if="$store.state.tabFlg == 1" @click="$store.commit('changeTabFlg',2)" >다음</li>
+      <li class="header-button header-button-right" v-if="$store.state.tabFlg == 2" @click="$store.dispatch('writeContent'); $store.commit('changeTabFlg',0)">작성</li>
     </ul>
   </div>
   {{ $store.state.lastId }}
@@ -39,6 +40,7 @@ export default {
       let file= e.target.files;
       let imgUrl = URL.createObjectURL(file[0]);
       this.$store.commit('changeImgUrl', imgUrl);
+      this.$store.commit('changeImg', file[0]);
       this.$store.commit('changeTabFlg',1);
       e.target.value='';
     }  

@@ -10,6 +10,8 @@ const store = createStore({
             tabFlg: 0, //탭UI flg:0:메인,1:필터,2:작성
             imgUrl:'',//이미지 url
             filter:'',
+            content:'',
+            img:'',
         }
     },
     mutations:{
@@ -43,9 +45,17 @@ const store = createStore({
         clearState(state){
             state.filter='';
             state.imgUrl='';
+        },
+        changeImg(state, img){
+            state.img = img;
+        },
+        // 작성글데이터셋팅용
+        addWriteData(state,data){
+            state.boardData.unshift(data);
         }
     },
     actions:{
+        //메인 게시글 습득
         getMainList(context){
             axios.get('http://192.168.0.66/api/boards')
             .then(res=>{
@@ -55,6 +65,7 @@ const store = createStore({
                 console.log(err)
             })
         },
+        //게시글 추가 습득
         getMoreList(context){
                 axios.get('http://192.168.0.66/api/boards/'+context.state.lastId)
                 .then(res=>{
@@ -68,7 +79,32 @@ const store = createStore({
                 .catch(err=>{
                     console.log(err)
                 })
-            }
+            },
+        //게시글작성
+        writeContent(context){
+            const data={
+                name:'박진영',
+                filter:context.state.filter,
+                img:context.state.img,
+                content:context.state.content
+            };
+            console.log(data)
+            const header={
+                headers:{
+                    'Content-Type' : 'multipart/form-data',
+                }
+            };
+            axios.post('http://192.168.0.66/api/boards',data, header)
+            .then( res => {
+                // console.log(res);
+                context.commit('addWriteData', res.data);
+                context.commit('changeTabFlg',0);
+                context.commit('clearState');
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+        },
     }
 })
 

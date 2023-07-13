@@ -12,9 +12,9 @@
     </div>
     <!-- 글작성 -->
     <div v-if="$store.state.tabFlg == 2">
-        <div class="upload-img"  :style="{backgroundImage : `url('${$store.state.imgUrl}')`}"></div>
+        <div class="upload-img"  :class="$store.state.filter" :style="{backgroundImage : `url('${$store.state.imgUrl}')`}"></div>
         <div>
-            <textarea class="write-box" name="content" id="content" placeholder="내용 입력"></textarea>
+            <textarea class="write-box" name="content" id="content" placeholder="내용 입력" v-model="$store.state.content"></textarea>
         </div>
     </div>
 </template>
